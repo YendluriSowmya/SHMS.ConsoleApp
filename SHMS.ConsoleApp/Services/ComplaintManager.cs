@@ -4,9 +4,9 @@ using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ComplaintService
-{
-    public class ComplaintManager
+namespace SmartHostelManagementSystem.Models;
+
+public class ComplaintManager
     {
         private readonly string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "complaints.json");
 
@@ -57,4 +57,3 @@ namespace ComplaintService
             await File.WriteAllTextAsync(filePath, json);
         }
     }
-}
