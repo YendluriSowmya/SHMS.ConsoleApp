@@ -1,25 +1,18 @@
-namespace SmartHostelManagementSystem.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class Complaint
+namespace ComplaintService
 {
-    public int ComplaintID { get; set; }
-    public int StudentID { get; set; }
-    public string Issue { get; set; }
-    public string Status { get; set; } = "Pending";
-    public DateTime RaisedOn { get; set; }
-
-    public Complaint() { }
-
-    public Complaint(int complaintID, int studentID, string issue)
+    public class Complaint
     {
-        ComplaintID = complaintID;
-        StudentID = studentID;
-        Issue = issue;
-        RaisedOn = DateTime.Now;
-    }
-
-    public void Resolve()
-    {
-        Status = "Resolved";
+        public int ComplaintId { get; set; }
+        public string StudentId { get; set; }
+        public string Issue { get; set; }
+        public string Status { get; set; }
+        public DateTime DateLogged { get; set; }
+        public DateTime ExpectedResolutionDate { get; set; }
     }
 }
