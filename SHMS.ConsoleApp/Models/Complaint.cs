@@ -1,25 +1,10 @@
 namespace SmartHostelManagementSystem.Models;
-
 public class Complaint
-{
-    public int ComplaintID { get; set; }
-    public int StudentID { get; set; }
-    public string Issue { get; set; }
-    public string Status { get; set; } = "Pending";
-    public DateTime RaisedOn { get; set; }
-
-    public Complaint() { }
-
-    public Complaint(int complaintID, int studentID, string issue)
     {
-        ComplaintID = complaintID;
-        StudentID = studentID;
-        Issue = issue;
-        RaisedOn = DateTime.Now;
+        public int ComplaintId { get; set; }
+        public string StudentId { get; set; }
+        public string Issue { get; set; }
+        public string Status { get; set; }
+        public DateTime DateLogged { get; set; }
+        public DateTime ExpectedResolutionDate { get; set; }
     }
-
-    public void Resolve()
-    {
-        Status = "Resolved";
-    }
-}
