@@ -1,6 +1,5 @@
 namespace SmartHostelManagementSystem.Models;
-{
-    public class Complaint
+public class Complaint
     {
         public int ComplaintId { get; set; }
         public string StudentId { get; set; }
@@ -9,4 +8,3 @@ namespace SmartHostelManagementSystem.Models;
         public DateTime DateLogged { get; set; }
         public DateTime ExpectedResolutionDate { get; set; }
     }
-}
