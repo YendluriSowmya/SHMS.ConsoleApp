@@ -10,6 +10,12 @@ namespace SHMS.ConsoleApp
     {
         static void Main(string[] args)
         {
+            int[] scores = [213, 414, 44, 1223, 41, 44, 14];
+
+            IEnumerable<int> scoreQuery =
+                from score in scores
+                where score > 80
+                select score;   
         }
     }
 }
