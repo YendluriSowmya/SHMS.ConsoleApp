@@ -1,4 +1,9 @@
+UnitTests
+using System;
+namespace SmartHostelManagementSystem.Models;
+
         namespace SmartHostelManagementSystem.Models;
+master
 
         public class Student : Person
         {
