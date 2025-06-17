@@ -1,15 +1,19 @@
-public class RoomService
+
+namespace SmartHostelManagementSystem.Models
 {
-	private readonly List<Room> _rooms;
-
-	public RoomService(List<Room> rooms)
+	public class RoomService
 	{
-		_rooms = rooms;
-	}
+		private readonly List<Room> _rooms;
 
-	public List<Student> GetAllStudents()
-	{
-		return _rooms.SelectMany(r => r.Occupants).ToList(); // Using LINQ for collecting the data of students in every Room.
-	}
+		public RoomService(List<Room> rooms)
+		{
+			_rooms = rooms;
+		}
 
+		public List<Student> GetAllStudents()
+		{
+			return _rooms.SelectMany(r => r.Occupants).ToList();
+		}
+
+	}
 }
