@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 namespace SmartHostelManagementSystem.Models;
 
 public class Room

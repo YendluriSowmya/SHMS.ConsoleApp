@@ -108,31 +108,31 @@ namespace SmartHostelManagementSystem
 
     class Program
     {
-        static void Main(string[] args)
-        {
-            var roomService = new RoomService();
-            var complaintService = new ComplaintService();
-            var student1 = new Student { Id = 1, Name = "John", FeePaid = 5000 };
+        //static void Main(string[] args)
+        //{
+        //    var roomService = new RoomService();
+        //    var complaintService = new ComplaintService();
+        //    var student1 = new Student { Id = 1, Name = "John", FeePaid = 5000 };
 
-            Console.WriteLine("Allocating room...");
-            if (roomService.AllocateRoom(student1))
-            {
-                Console.WriteLine($"Room {student1.RoomNumber} allocated to {student1.Name}.");
-            }
-            else
-            {
-                Console.WriteLine("No available rooms.");
-            }
+        //    Console.WriteLine("Allocating room...");
+        //    if (roomService.AllocateRoom(student1))
+        //    {
+        //        Console.WriteLine($"Room {student1.RoomNumber} allocated to {student1.Name}.");
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("No available rooms.");
+        //    }
 
-            complaintService.RegisterComplaint(student1.Id, "Water leakage in bathroom");
-            Console.WriteLine("\nComplaints:");
-            foreach (var c in complaintService.GetComplaints())
-            {
-                Console.WriteLine($"Complaint #{c.Id} from Student {c.StudentId}: {c.Message} - {c.Status}");
-            }
+        //    complaintService.RegisterComplaint(student1.Id, "Water leakage in bathroom");
+        //    Console.WriteLine("\nComplaints:");
+        //    foreach (var c in complaintService.GetComplaints())
+        //    {
+        //        Console.WriteLine($"Complaint #{c.Id} from Student {c.StudentId}: {c.Message} - {c.Status}");
+        //    }
 
-            Console.WriteLine("\nPress any key to exit...");
-            Console.ReadKey();
-        }
+        //    Console.WriteLine("\nPress any key to exit...");
+        //    Console.ReadKey();
+        //}
     }
 }

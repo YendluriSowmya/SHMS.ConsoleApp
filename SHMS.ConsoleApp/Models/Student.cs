@@ -1,4 +1,5 @@
-    namespace SmartHostelManagementSystem.Models;
+using System;
+namespace SmartHostelManagementSystem.Models;
 
     public class Student : Person
     {

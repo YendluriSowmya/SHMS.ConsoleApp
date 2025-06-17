@@ -1,4 +1,7 @@
-﻿public static class ReportMenu
+﻿using System;
+using Services;
+
+public static class ReportMenu
 {
     public static void Launch(ReportsService reportService)
     {
