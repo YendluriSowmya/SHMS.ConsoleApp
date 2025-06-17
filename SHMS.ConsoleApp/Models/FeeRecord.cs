@@ -1,3 +1,5 @@
+using System;
+
 namespace SmartHostelManagementSystem.Models;
 
 public class FeeRecord

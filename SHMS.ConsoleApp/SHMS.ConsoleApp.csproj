@@ -77,9 +77,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Complaint.cs" />
+    <Compile Include="Models\FeeRecord.cs" />
+    <Compile Include="Models\HostelAdmin.cs" />
+    <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\Room.cs" />
+    <Compile Include="Models\Student.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ComplaintManager.cs" />
+    <Compile Include="Services\ReportsService.cs" />
+    <Compile Include="UI\ReportMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
