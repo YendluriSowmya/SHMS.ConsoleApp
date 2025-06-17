@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.36203.30
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SHMS.ConsoleApp", "SHMS.ConsoleApp\SHMS.ConsoleApp.csproj", "{AE2789C7-0919-4259-B5B2-C4A657F165F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SHMS.Tests", "SHMS.Tests\SHMS.Tests.csproj", "{860697E6-9BE1-4683-A85B-77893FD74C58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{BD608243-2AFF-409F-A420-0FA24793E4B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{AE2789C7-0919-4259-B5B2-C4A657F165F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE2789C7-0919-4259-B5B2-C4A657F165F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE2789C7-0919-4259-B5B2-C4A657F165F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{860697E6-9BE1-4683-A85B-77893FD74C58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{860697E6-9BE1-4683-A85B-77893FD74C58}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{860697E6-9BE1-4683-A85B-77893FD74C58}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{860697E6-9BE1-4683-A85B-77893FD74C58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD608243-2AFF-409F-A420-0FA24793E4B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD608243-2AFF-409F-A420-0FA24793E4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD608243-2AFF-409F-A420-0FA24793E4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD608243-2AFF-409F-A420-0FA24793E4B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

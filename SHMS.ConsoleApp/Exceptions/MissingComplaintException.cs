@@ -1,4 +1,5 @@
-﻿namespace SmartHostelManagementSystem.Exceptions
+﻿using System;
+namespace SmartHostelManagementSystem.Exceptions
 {
     public class MissingComplaintException : Exception
     {

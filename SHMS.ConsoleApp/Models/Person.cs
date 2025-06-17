@@ -1,15 +1,16 @@
+using System;
 namespace SmartHostelManagementSystem.Models;
 
 public class Person
 {
-    public int ID { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
 
     public Person() { }
 
     public Person(int id, string name)
     {
-        ID = id;
+        Id = id;
         Name = name;
     }
 }
