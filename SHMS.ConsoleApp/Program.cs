@@ -1,4 +1,4 @@
-﻿using ComplaintService;
+﻿using SmartHostelManagementSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,47 +11,48 @@ namespace SHMS.ConsoleApp
     {
         static async Task Main(string[] args)
         {
-            ComplaintManager manager = new ComplaintManager();
-            Console.WriteLine("1. Register Complaint\n2. View Complaints\n3. Update Complaint Status");
-            string option = Console.ReadLine();
 
-            switch (option)
-            {
-                case "1":
-                    Console.Write("Enter Student ID: ");
-                    string sid = Console.ReadLine();
-                    Console.Write("Enter the Issue: ");
-                    string desc = Console.ReadLine();
-                    await manager.RegisterComplaintAsync(new Complaint
-                    {
-                        StudentId = sid,
-                        Issue = desc
-                    });
-                    Console.WriteLine("Complaint registered successfully!");
-                    break;
+                ComplaintManager manager = new ComplaintManager();
+                Console.WriteLine("1. Register Complaint\n2. View Complaints\n3. Update Complaint Status");
+                string option = Console.ReadLine();
 
-                case "2":
-                    var complaints = await manager.GetAllComplaintsAsync();
-                    foreach (var c in complaints)
-                    {
-                        Console.WriteLine($"{c.ComplaintId}: {c.StudentId}, {c.Issue}, Status: {c.Status}, Resolve By: {c.ExpectedResolutionDate.ToShortDateString()}");
-                    }
-                    break;
+                switch (option)
+                {
+                    case "1":
+                        Console.Write("Enter Student ID: ");
+                        string sid = Console.ReadLine();
+                        Console.Write("Enter the Issue: ");
+                        string desc = Console.ReadLine();
+                        await manager.RegisterComplaintAsync(new Complaint
+                        {
+                            StudentId = sid,
+                            Issue = desc
+                        });
+                        Console.WriteLine("Complaint registered successfully!");
+                        break;
 
-                case "3":
-                    Console.Write("Enter Complaint ID: ");
-                    int cid = int.Parse(Console.ReadLine());
-                    Console.Write("Enter New Status: ");
-                    string status = Console.ReadLine();
-                    await manager.UpdateComplaintStatusAsync(cid, status);
-                    Console.WriteLine("Complaint status updated.");
-                    break;
+                    case "2":
+                        var complaints = await manager.GetAllComplaintsAsync();
+                        foreach (var c in complaints)
+                        {
+                            Console.WriteLine($"{c.ComplaintId}: {c.StudentId}, {c.Issue}, Status: {c.Status}, Resolve By: {c.ExpectedResolutionDate.ToShortDateString()}");
+                        }
+                        break;
 
-                default:
-                    Console.WriteLine("Invalid option");
-                    break;
+                    case "3":
+                        Console.Write("Enter Complaint ID: ");
+                        int cid = int.Parse(Console.ReadLine());
+                        Console.Write("Enter New Status: ");
+                        string status = Console.ReadLine();
+                        await manager.UpdateComplaintStatusAsync(cid, status);
+                        Console.WriteLine("Complaint status updated.");
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid option");
+                        break;
+                }
             }
-        }
     }
 
 }
