@@ -2,37 +2,33 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace SmartHostelManagementSystem.Models
 {
-
-
-
     public class ComplaintManager
     {
         private readonly string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "complaints.json");
 
-        public async Task RegisterComplaintAsync(Complaint complaint)
+        public void RegisterComplaint(Complaint complaint)
         {
-            var complaints = await LoadComplaintsAsync();
+            var complaints = LoadComplaints();
             complaint.ComplaintId = complaints.Count + 1;
             complaint.DateLogged = DateTime.Now;
             complaint.ExpectedResolutionDate = DateTime.Now.AddDays(5);
             complaint.Status = "Open";
 
             complaints.Add(complaint);
-            await SaveComplaintsAsync(complaints);
+            SaveComplaints(complaints);
         }
 
-        public async Task<List<Complaint>> GetAllComplaintsAsync()
+        public List<Complaint> GetAllComplaints()
         {
-            return await LoadComplaintsAsync();
+            return LoadComplaints();
         }
 
-        public async Task UpdateComplaintStatusAsync(int id, string newStatus)
+        public void UpdateComplaintStatus(int id, string newStatus)
         {
-            var complaints = await LoadComplaintsAsync();
+            var complaints = LoadComplaints();
             var complaint = complaints.Find(c => c.ComplaintId == id);
 
             if (complaint == null)
@@ -42,22 +38,23 @@ namespace SmartHostelManagementSystem.Models
             }
 
             complaint.Status = newStatus;
-            await SaveComplaintsAsync(complaints);
+            SaveComplaints(complaints);
         }
 
-        private async Task<List<Complaint>> LoadComplaintsAsync()
+        private List<Complaint> LoadComplaints()
         {
             if (!File.Exists(filePath))
                 return new List<Complaint>();
 
-            var json = await File.ReadAllTextAsync(filePath);
+            var json = File.ReadAllText(filePath);
             return JsonSerializer.Deserialize<List<Complaint>>(json) ?? new List<Complaint>();
         }
 
-        private async Task SaveComplaintsAsync(List<Complaint> complaints)
+        private void SaveComplaints(List<Complaint> complaints)
         {
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)); 
             var json = JsonSerializer.Serialize(complaints, new JsonSerializerOptions { WriteIndented = true });
-            await File.WriteAllTextAsync(filePath, json);
+            File.WriteAllText(filePath, json);
         }
     }
 }
