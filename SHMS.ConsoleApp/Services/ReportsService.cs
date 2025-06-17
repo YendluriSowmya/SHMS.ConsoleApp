@@ -10,19 +10,20 @@ namespace Services
         private readonly List<Room> _rooms;
         private readonly List<Complaint> _complaints;
         private readonly List<FeeRecord> _feeRecords;
+        private readonly List<Student> _students;
 
-        public ReportsService(List<Room> rooms, List<Complaint> complaints, List<FeeRecord> feeRecords)
+        public ReportsService(List<Room> rooms, List<Complaint> complaints, List<FeeRecord> feeRecords, List<Student> students)
         {
-            _rooms = rooms;
-            _complaints = complaints;
-            _feeRecords = feeRecords;
+            _rooms = rooms ?? new List<Room>();
+            _complaints = complaints ?? new List<Complaint>();
+            _feeRecords = feeRecords ?? new List<FeeRecord>();
+            _students = students ?? new List<Student>();
         }
 
         public List<Student> GetStudentsByRoom(int roomNumber)
         {
-            return _rooms
-                .Where(r => r.RoomNumber == roomNumber)
-                .SelectMany(r => r.Occupants)
+            return _students
+                .Where(s => s.RoomNumber == roomNumber)
                 .ToList();
         }
 
@@ -35,17 +36,14 @@ namespace Services
 
         public List<Student> GetFeeDefaulters()
         {
-            var defaulters = _feeRecords
-                .Where(f => !f.IsPaid)
-                .Select(f => f.Student)
+            return _students
+                .Where(s => !_feeRecords.Any(f => f.StudentID == s.ID))
                 .ToList();
-
-            return defaulters;
         }
 
         public void DisplayStudents(List<Student> students)
         {
-            if (students.Count == 0)
+            if (students == null || students.Count == 0)
             {
                 Console.WriteLine("No students found.");
                 return;
@@ -53,13 +51,13 @@ namespace Services
 
             foreach (var student in students)
             {
-                Console.WriteLine($"ID: {student.Id}, Name: {student.Name}");
+                Console.WriteLine($"ID: {student.ID}, Name: {student.Name}");
             }
         }
 
         public void DisplayComplaints(List<Complaint> complaints)
         {
-            if (complaints.Count == 0)
+            if (complaints == null || complaints.Count == 0)
             {
                 Console.WriteLine("No complaints found.");
                 return;

@@ -1,5 +1,7 @@
-﻿using SmartHostelManagementSystem.Models;
+﻿using Services;
+using SmartHostelManagementSystem.Models;
 using System;
+using System.Collections.Generic;
 
 namespace SHMS.ConsoleApp
 {
@@ -7,11 +9,22 @@ namespace SHMS.ConsoleApp
     {
         static void Main(string[] args)
         {
+            
+            var rooms = new List<Room>();
+            var feeRecords = new List<FeeRecord>();
+            var complaints = new List<Complaint>();
+            var students = new List<Student>();
+
+            
+            var reportsService = new ReportsService(rooms, complaints, feeRecords, students);
+
+            
             ComplaintManager manager = new ComplaintManager();
 
             Console.WriteLine("1. Register Complaint");
             Console.WriteLine("2. View Complaints");
             Console.WriteLine("3. Update Complaint Status");
+            Console.WriteLine("4. Reports");
             Console.Write("Choose an option: ");
             string option = Console.ReadLine();
 
@@ -33,8 +46,8 @@ namespace SHMS.ConsoleApp
                     break;
 
                 case "2":
-                    var complaints = manager.GetAllComplaints();
-                    foreach (var c in complaints)
+                    var allComplaints = manager.GetAllComplaints();
+                    foreach (var c in allComplaints)
                     {
                         Console.WriteLine($"{c.ComplaintId}: {c.StudentId}, {c.Issue}, Status: {c.Status}, Resolve By: {c.ExpectedResolutionDate.ToShortDateString()}");
                     }
@@ -47,6 +60,10 @@ namespace SHMS.ConsoleApp
                     string status = Console.ReadLine();
                     manager.UpdateComplaintStatus(cid, status);
                     Console.WriteLine("Complaint status updated.");
+                    break;
+
+                case "4":
+                    ReportMenu.Launch(reportsService); 
                     break;
 
                 default:
