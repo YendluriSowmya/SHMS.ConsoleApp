@@ -74,8 +74,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
+  
+  
     <Compile Include="Exceptions\InvalidFeeException.cs" />
     <Compile Include="Exceptions\MissingComplaintException.cs" />
     <Compile Include="Exceptions\RoomAlreadyAssignedException.cs" />
@@ -98,14 +98,14 @@ UnitTests
 
 master
     <Compile Include="UI\ReportMenu.cs" />
-  </ItemGroup>
-  <ItemGroup>
+  
+
     <None Include="App.config" />
     <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="obj\Debug\SHMS.ConsoleApp.csproj.AssemblyReference.cache" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
+  
+  
     <Folder Include="bin\Debug\" />
     <Folder Include="Data\" />
     <Folder Include="obj\Debug\TempPE\" />
