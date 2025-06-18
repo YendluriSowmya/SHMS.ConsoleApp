@@ -20,7 +20,7 @@ namespace SHMS.ConsoleApp
             rooms.Add(new Room(102, 3));
 
             var roomService = new RoomService();
-            var complaintService = new ComplaintService(complaints);
+            var complaintManager = new ComplaintManager(complaints);
             var reportsService = new ReportsService(rooms, complaints, fees, students);
 
             bool exit = false;
@@ -113,7 +113,7 @@ namespace SHMS.ConsoleApp
                         break;
 
                     case "5":
-                        var all = complaintService.GetAllComplaints();
+                        var all = complaintManager.GetAllComplaints();
                         foreach (var c in all)
                         {
                             Console.WriteLine($"ID: {c.ComplaintID}, Student: {c.StudentID}, Issue: {c.Issue}, Status: {c.Status}");
