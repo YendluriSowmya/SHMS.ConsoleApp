@@ -1,26 +1,24 @@
 ﻿using Services;
 using SmartHostelManagementSystem.Models;
+using SmartHostelManagementSystem.Services;
 using System;
 using System.Collections.Generic;
-using System.Text.Json;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SHMS.ConsoleApp
 {
     public class Program
     {
-        static List<Student> students = new();
-        static List<Room> rooms = new();
-        static List<Complaint> complaints = new();
-        static List<FeeRecord> fees = new();
-
         static async Task Main(string[] args)
         {
-            rooms.Add(new Room(101, 2));
-            rooms.Add(new Room(102, 3));
-
             var roomService = new RoomService();
-            var complaintManager = new ComplaintManager(complaints);
+            var students = await roomService.LoadStudentsAsync();
+            var rooms = await roomService.LoadRoomsAsync();
+
+            var complaints = new List<Complaint>();
+            var fees = new List<FeeRecord>();
+            var complaintService = new ComplaintService(complaints);
             var reportsService = new ReportsService(rooms, complaints, fees, students);
 
             bool exit = false;
@@ -54,7 +52,8 @@ namespace SHMS.ConsoleApp
                         int sid = int.Parse(Console.ReadLine());
                         Console.Write("Enter Room Number: ");
                         int rno = int.Parse(Console.ReadLine());
-                        var student = students.FirstOrDefault(s => s.ID == sid);
+
+                        var student = students.FirstOrDefault(s => s.Id == sid);
                         var room = rooms.FirstOrDefault(r => r.RoomNumber == rno);
 
                         if (student == null || room == null)
@@ -87,7 +86,7 @@ namespace SHMS.ConsoleApp
                         }
 
                         fees.Add(new FeeRecord(feeId, amount));
-                        var stu = students.FirstOrDefault(s => s.ID == feeId);
+                        var stu = students.FirstOrDefault(s => s.Id == feeId);
                         if (stu != null) stu.FeePaid = true;
 
                         Console.WriteLine("Fee payment recorded.");
@@ -113,7 +112,7 @@ namespace SHMS.ConsoleApp
                         break;
 
                     case "5":
-                        var all = complaintManager.GetAllComplaints();
+                        var all = complaintService.GetAllComplaints();
                         foreach (var c in all)
                         {
                             Console.WriteLine($"ID: {c.ComplaintID}, Student: {c.StudentID}, Issue: {c.Issue}, Status: {c.Status}");
@@ -143,7 +142,7 @@ namespace SHMS.ConsoleApp
                                 int rn = int.Parse(Console.ReadLine());
                                 var studs = reportsService.GetStudentsByRoom(rn);
                                 foreach (var s in studs)
-                                    Console.WriteLine($"- {s.Name} (ID: {s.ID})");
+                                    Console.WriteLine($"- {s.Name} (ID: {s.Id})");
                                 break;
 
                             case "2":
@@ -155,7 +154,7 @@ namespace SHMS.ConsoleApp
                             case "3":
                                 var defaulters = reportsService.GetFeeDefaulters();
                                 foreach (var s in defaulters)
-                                    Console.WriteLine($"- {s.Name} (ID: {s.ID}) has not paid fees.");
+                                    Console.WriteLine($"- {s.Name} (ID: {s.Id}) has not paid fees.");
                                 break;
                         }
                         break;
@@ -169,6 +168,10 @@ namespace SHMS.ConsoleApp
                         break;
                 }
             }
+
+            // Save changes on exit
+            await roomService.SaveStudentsAsync(students);
+            await roomService.SaveRoomsAsync(rooms);
 
             Console.WriteLine("Exiting SHMS Console App.");
         }
