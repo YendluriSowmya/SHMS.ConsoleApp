@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SHMS.ConsoleApp
 {
-    public class Program
+    public class Program                        
     {
         static async Task Main(string[] args)
         {

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using SmartHostelManagementSystem.Models;
 using SmartHostelManagementSystem.Exceptions;
 using Xunit;
@@ -13,9 +12,9 @@ namespace TestProject
         {
             var complaint = new Complaint
             {
-                StudentID = "",
+                StudentID = 0, // int, 0 means invalid/missing
                 Issue = "Water leakage",
-                DateLogged = DateTime.Now,
+                RaisedOn = DateTime.Now,
                 ExpectedResolutionDate = DateTime.Now.AddDays(2)
             };
 
@@ -27,9 +26,9 @@ namespace TestProject
         {
             var complaint = new Complaint
             {
-                StudentId = "123",
+                StudentID = 123,
                 Issue = "",
-                DateLogged = DateTime.Now,
+                RaisedOn = DateTime.Now,
                 ExpectedResolutionDate = DateTime.Now.AddDays(2)
             };
 
@@ -41,9 +40,9 @@ namespace TestProject
         {
             var complaint = new Complaint
             {
-                StudentId = "123",
+                StudentID = 123,
                 Issue = "Broken fan",
-                DateLogged = default,
+                RaisedOn = default,
                 ExpectedResolutionDate = default
             };
 
@@ -55,9 +54,9 @@ namespace TestProject
         {
             var complaint = new Complaint
             {
-                StudentId = "123",
+                StudentID = 123,
                 Issue = "Electricity issue",
-                DateLogged = DateTime.Now,
+                RaisedOn = DateTime.Now,
                 ExpectedResolutionDate = DateTime.Now.AddDays(2)
             };
 
