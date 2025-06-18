@@ -37,7 +37,7 @@ namespace Services
         public List<Student> GetFeeDefaulters()
         {
             return _students
-                .Where(s => !_feeRecords.Any(f => f.StudentID == s.ID))
+                .Where(s => !_feeRecords.Any(f => f.StudentID == s.Id))
                 .ToList();
         }
 
@@ -51,7 +51,7 @@ namespace Services
 
             foreach (var student in students)
             {
-                Console.WriteLine($"ID: {student.ID}, Name: {student.Name}");
+                Console.WriteLine($"ID: {student.Id}, Name: {student.Name}");
             }
         }
 
@@ -65,7 +65,7 @@ namespace Services
 
             foreach (var c in complaints)
             {
-                Console.WriteLine($"ID: {c.ComplaintId}, Student: {c.StudentId}, Status: {c.Status}, Issue: {c.Issue}");
+                Console.WriteLine($"ID: {c.ComplaintID}, Student: {c.StudentID}, Status: {c.Status}, Issue: {c.Issue}");
             }
         }
     }

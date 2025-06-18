@@ -13,7 +13,7 @@ namespace TestProject
         {
             var complaint = new Complaint
             {
-                StudentId = "",
+                StudentID = "",
                 Issue = "Water leakage",
                 DateLogged = DateTime.Now,
                 ExpectedResolutionDate = DateTime.Now.AddDays(2)
