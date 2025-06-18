@@ -1,4 +1,4 @@
-using SmartHostelManagementSystem.Models;
+﻿using SmartHostelManagementSystem.Models;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -7,7 +7,6 @@ namespace SmartHostelManagementSystem.Services
 {
     public class RoomService
     {
-
         private readonly string roomFilePath = "rooms.json";
         private readonly string _studentFilePath = Path.Combine("data", "students.txt");
         private readonly string _roomFilePath = Path.Combine("data", "rooms.txt");
@@ -17,44 +16,32 @@ namespace SmartHostelManagementSystem.Services
             Directory.CreateDirectory("data");
         }
 
-        public async Task AllocateRoomAsync(Student student, Room room)
+        // ✅ NEW METHOD to match Program.cs call
+        public async Task AllocateRoomAsync(int studentId, int roomNumber, List<Student> students, List<Room> rooms)
         {
-            if (room.Occupants.Count >= room.Capacity)
+            var student = students.FirstOrDefault(s => s.Id == studentId);
+            var room = rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+
+            if (student == null)
+                throw new ArgumentException("Student not found.");
+            if (room == null)
+                throw new ArgumentException("Room not found.");
+            if (room.Occupants.Count >= room.Capacity || !room.HasSpace)
                 throw new InvalidOperationException("Room is full.");
-
-            if (!room.HasSpace)
-                throw new Exception("Room is already full.");
-
-            if (room.Occupants.Contains(student))
+            if (room.Occupants.Any(s => s.Id == studentId))
                 throw new Exception("Student is already in this room.");
 
+            // Add student to room
             room.Occupants.Add(student);
             student.RoomNumber = room.RoomNumber;
             student.IsAllocated = true;
+            room.IsOccupied = true;
 
-            // Save updated lists after allocation
-            var students = await LoadStudentsAsync();
-            var rooms = await LoadRoomsAsync();
-
-            // Update student in list
-            var existingStudent = students.FirstOrDefault(s => s.Id == student.Id);
-            if (existingStudent == null)
-                students.Add(student);
-            else
-            {
-                existingStudent.RoomNumber = student.RoomNumber;
-                existingStudent.FeePaid = student.FeePaid;
-            }
-
-            // Update room in list
-            var existingRoom = rooms.FirstOrDefault(r => r.RoomNumber == room.RoomNumber);
-            if (existingRoom == null)
-                rooms.Add(room);
-            else
-                existingRoom.Occupants = room.Occupants;
-
+            // Save to files
             await SaveStudentsAsync(students);
             await SaveRoomsAsync(rooms);
+
+            Console.WriteLine("Room allocated successfully.");
         }
 
         public async Task SaveStudentsAsync(List<Student> students)
@@ -97,19 +84,17 @@ namespace SmartHostelManagementSystem.Services
         public async Task SaveRoomsAsync(List<Room> rooms)
         {
             var json = JsonSerializer.Serialize(rooms, new JsonSerializerOptions { WriteIndented = true });
-            await File.WriteAllTextAsync("rooms.json", json);
+            await File.WriteAllTextAsync(roomFilePath, json);
         }
-
 
         public async Task<List<Room>> LoadRoomsAsync()
         {
             if (File.Exists(roomFilePath))
             {
                 var json = await File.ReadAllTextAsync(roomFilePath);
-                return JsonSerializer.Deserialize<List<Room>>(json);
+                return JsonSerializer.Deserialize<List<Room>>(json) ?? new List<Room>();
             }
             return new List<Room>();
         }
-
     }
 }

@@ -37,7 +37,7 @@ namespace Services
         public List<Student> GetFeeDefaulters()
         {
             return _students
-                .Where(s => !_feeRecords.Any(f => f.StudentID == s.Id))
+                .Where(s => !_feeRecords.Any(f => f.StudentID == s.Id && f.IsPaid))
                 .ToList();
         }
 
@@ -51,7 +51,7 @@ namespace Services
 
             foreach (var student in students)
             {
-                Console.WriteLine($"ID: {student.Id}, Name: {student.Name}");
+                Console.WriteLine($"ID: {student.Id}, Name: {student.Name}, Room: {student.RoomNumber}, Contact: {student.ContactNumber}");
             }
         }
 
@@ -65,8 +65,32 @@ namespace Services
 
             foreach (var c in complaints)
             {
-                Console.WriteLine($"ID: {c.ComplaintID}, Student: {c.StudentID}, Status: {c.Status}, Issue: {c.Issue}");
+                Console.WriteLine($"ID: {c.ComplaintID}, Student ID: {c.StudentID}, Status: {c.Status}, Issue: {c.Issue}");
             }
+        }
+
+        // ✅ Added method for Program.cs compatibility
+        public void GenerateReport()
+        {
+            Console.WriteLine("\n========== SMART HOSTEL SYSTEM REPORT ==========");
+
+            Console.WriteLine("\n--- Room-wise Student Allocation ---");
+            foreach (var room in _rooms)
+            {
+                Console.WriteLine($"Room {room.RoomNumber}: {room.Occupants.Count}/{room.Capacity}");
+                foreach (var s in room.Occupants)
+                    Console.WriteLine($" - {s.Name} (ID: {s.Id})");
+            }
+
+            Console.WriteLine("\n--- Pending Complaints ---");
+            var pending = GetComplaintsByStatus("Pending");
+            DisplayComplaints(pending);
+
+            Console.WriteLine("\n--- Fee Defaulters ---");
+            var defaulters = GetFeeDefaulters();
+            DisplayStudents(defaulters);
+
+            Console.WriteLine("===============================================\n");
         }
     }
 }
