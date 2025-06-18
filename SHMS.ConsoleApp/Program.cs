@@ -18,7 +18,7 @@ namespace SHMS.ConsoleApp
 
             var complaints = new List<Complaint>();
             var fees = new List<FeeRecord>();
-            var complaintService = new ComplaintService(complaints);
+            var complaintManager = new ComplaintManager();
             var reportsService = new ReportsService(rooms, complaints, fees, students);
 
             bool exit = false;
@@ -107,12 +107,12 @@ namespace SHMS.ConsoleApp
                             Status = "Pending"
                         };
 
-                        await complaintService.RegisterComplaintAsync(complaint);
+                        await complaintManager.RegisterComplaintAsync(complaint);
                         Console.WriteLine("Complaint registered.");
                         break;
 
                     case "5":
-                        var all = complaintService.GetAllComplaints();
+                        var all = complaintManager.GetAllComplaints();
                         foreach (var c in all)
                         {
                             Console.WriteLine($"ID: {c.ComplaintID}, Student: {c.StudentID}, Issue: {c.Issue}, Status: {c.Status}");
@@ -124,7 +124,7 @@ namespace SHMS.ConsoleApp
                         int compToUpdate = int.Parse(Console.ReadLine());
                         Console.Write("Enter New Status: ");
                         string status = Console.ReadLine();
-                        complaintService.UpdateComplaintStatus(compToUpdate, status);
+                        complaintManager.UpdateComplaintStatus(compToUpdate, status);
                         Console.WriteLine("Complaint status updated.");
                         break;
 

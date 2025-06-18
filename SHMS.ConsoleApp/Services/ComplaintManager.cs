@@ -2,34 +2,43 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace SmartHostelManagementSystem.Models
 {
     public class ComplaintManager
     {
-        private readonly string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "complaints.json");
+        private readonly string filePath = Path.Combine(AppContext.BaseDirectory, "data", "complaints.json");
 
-        public void RegisterComplaint(Complaint complaint)
+        public ComplaintManager()
         {
-            var complaints = LoadComplaints();
-            complaint.ComplaintId = complaints.Count + 1;
-            complaint.DateLogged = DateTime.Now;
-            complaint.ExpectedResolutionDate = DateTime.Now.AddDays(5);
-            complaint.Status = "Open";
+            // Ensure the data folder exists
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+        }
+
+        // Method 1: Register a new complaint asynchronously
+        public async Task RegisterComplaintAsync(Complaint complaint)
+        {
+            var complaints = await LoadComplaintsAsync();
+            complaint.ComplaintID = complaints.Count + 1;
+            complaint.RaisedOn = DateTime.Now;
+            complaint.Status = "Pending";
 
             complaints.Add(complaint);
-            SaveComplaints(complaints);
+            await SaveComplaintsAsync(complaints);
         }
 
+        // Method 2: Return all complaints (called synchronously in Program.cs)
         public List<Complaint> GetAllComplaints()
         {
-            return LoadComplaints();
+            return LoadComplaintsAsync().Result;
         }
 
+        // Method 3: Update complaint status (called synchronously in Program.cs)
         public void UpdateComplaintStatus(int id, string newStatus)
         {
-            var complaints = LoadComplaints();
-            var complaint = complaints.Find(c => c.ComplaintId == id);
+            var complaints = LoadComplaintsAsync().Result;
+            var complaint = complaints.Find(c => c.ComplaintID == id);
 
             if (complaint == null)
             {
@@ -38,23 +47,24 @@ namespace SmartHostelManagementSystem.Models
             }
 
             complaint.Status = newStatus;
-            SaveComplaints(complaints);
+            SaveComplaintsAsync(complaints).Wait();
         }
 
-        private List<Complaint> LoadComplaints()
+        // Helper: Load from complaints.json (async)
+        private async Task<List<Complaint>> LoadComplaintsAsync()
         {
             if (!File.Exists(filePath))
                 return new List<Complaint>();
 
-            var json = File.ReadAllText(filePath);
+            var json = await File.ReadAllTextAsync(filePath);
             return JsonSerializer.Deserialize<List<Complaint>>(json) ?? new List<Complaint>();
         }
 
-        private void SaveComplaints(List<Complaint> complaints)
+        // Helper: Save to complaints.json (async)
+        private async Task SaveComplaintsAsync(List<Complaint> complaints)
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(filePath)); 
             var json = JsonSerializer.Serialize(complaints, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(filePath, json);
+            await File.WriteAllTextAsync(filePath, json);
         }
     }
 }
