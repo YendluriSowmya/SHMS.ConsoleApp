@@ -13,11 +13,11 @@ namespace SHMS.ConsoleApp
         static async Task Main(string[] args)
         {
             var roomService = new RoomService();
-            var students = await roomService.LoadStudentsAsync();
+            var students = JsonFileHelper.LoadFromFile<Student>("students.json");
             var rooms = await roomService.LoadRoomsAsync();
 
-            var complaints = new List<Complaint>();
-            var fees = new List<FeeRecord>();
+            var complaints = JsonFileHelper.LoadFromFile<Complaint>("complaints.json");
+            var fees = JsonFileHelper.LoadFromFile<FeeRecord>("fees.json");
             var complaintManager = new ComplaintManager();
             var reportsService = new ReportsService(rooms, complaints, fees, students);
 
@@ -32,7 +32,8 @@ namespace SHMS.ConsoleApp
                 Console.WriteLine("5. View Complaints");
                 Console.WriteLine("6. Update Complaint Status");
                 Console.WriteLine("7. Generate Reports");
-                Console.WriteLine("8. Exit");
+                Console.WriteLine("8. View Registered Student Information");
+                Console.WriteLine("9. Exit");
                 Console.Write("Choose an option: ");
                 string option = Console.ReadLine();
 
@@ -44,11 +45,25 @@ namespace SHMS.ConsoleApp
                         Console.Write("Enter Name: ");
                         string name = Console.ReadLine();
                         students.Add(new Student(id, name, 0, false));
+                        JsonFileHelper.SaveToFile(students, "students.json");
                         Console.WriteLine("Student registered.");
                         break;
 
                     case "2":
-                        Console.Write("Enter Student ID: ");
+
+
+                    
+                        // Display only unallocated students
+                        Console.WriteLine("\nAvailable Students:");
+                        foreach (var s in students.Where(s => !s.IsAllocated))
+                            Console.WriteLine($"ID: {s.Id}, Name: {s.Name}");
+
+                        // Display only rooms that are not occupied
+                        Console.WriteLine("\nAvailable Rooms:");
+                        foreach (var r in rooms.Where(r => !r.IsOccupied))
+                            Console.WriteLine($"Room No: {r.RoomNumber}");
+
+                        Console.Write("\nEnter Student ID: ");
                         int sid = int.Parse(Console.ReadLine());
                         Console.Write("Enter Room Number: ");
                         int rno = int.Parse(Console.ReadLine());
@@ -56,22 +71,41 @@ namespace SHMS.ConsoleApp
                         var student = students.FirstOrDefault(s => s.Id == sid);
                         var room = rooms.FirstOrDefault(r => r.RoomNumber == rno);
 
-                        if (student == null || room == null)
+                        if (student == null)
                         {
-                            Console.WriteLine("Invalid student or room.");
+                            Console.WriteLine(" Student not found.");
                             break;
                         }
 
-                        try
+                        if (student.IsAllocated)
                         {
-                            await roomService.AllocateRoomAsync(student, room);
-                            Console.WriteLine("Room allocated successfully.");
+                            Console.WriteLine("Student is already allocated a room.");
+                            break;
                         }
-                        catch (Exception ex)
+
+                        if (room == null)
                         {
-                            Console.WriteLine($"Error: {ex.Message}");
+                            Console.WriteLine(" Room not found.");
+                            break;
                         }
+
+                        if (room.IsOccupied)
+                        {
+                            Console.WriteLine("Room is already allocated to someone else.");
+                            break;
+                        }
+
+                        // Allocate room
+                        room.IsOccupied = true;
+                        student.IsAllocated = true;
+                        student.RoomNumber = rno;  // Save the allocated room to the student
+
+                        Console.WriteLine("✅ Room allocated successfully.");
+
+                        await roomService.SaveRoomsAsync(rooms);
+                        await roomService.SaveStudentsAsync(students);
                         break;
+
 
                     case "3":
                         Console.Write("Enter Student ID: ");
@@ -86,6 +120,7 @@ namespace SHMS.ConsoleApp
                         }
 
                         fees.Add(new FeeRecord(feeId, amount));
+                        JsonFileHelper.SaveToFile(fees, "fees.json");
                         var stu = students.FirstOrDefault(s => s.Id == feeId);
                         if (stu != null) stu.FeePaid = true;
 
@@ -108,6 +143,8 @@ namespace SHMS.ConsoleApp
                         };
 
                         await complaintManager.RegisterComplaintAsync(complaint);
+                        complaints.Add(complaint);
+                        JsonFileHelper.SaveToFile(complaints, "complaints.json");
                         Console.WriteLine("Complaint registered.");
                         break;
 
@@ -160,6 +197,39 @@ namespace SHMS.ConsoleApp
                         break;
 
                     case "8":
+                        Console.WriteLine("\n--- Complete Student Information ---");
+                        foreach (var s in students)
+                        {
+                            Console.WriteLine($"\nStudent ID: {s.Id}");
+                            Console.WriteLine($"Name: {s.Name}");
+
+                            // Room info
+                            var roomAllocated = rooms.FirstOrDefault(r => r.IsOccupied && r.RoomNumber == s.RoomNumber);
+                            Console.WriteLine("Room Number: " + (roomAllocated != null ? roomAllocated.RoomNumber.ToString() : "Not Allocated"));
+
+                            // Fee status
+                            var feeRecord = fees.FirstOrDefault(f => f.StudentID == s.Id);
+                            Console.WriteLine("Fee Status: " + (feeRecord != null ? "Paid" : "Not Paid"));
+
+                            // Complaints
+                            var studentComplaints = complaints.Where(c => c.StudentID == s.Id).ToList();
+                            if (studentComplaints.Any())
+                            {
+                                Console.WriteLine("Complaints:");
+                                foreach (var c in studentComplaints)
+                                {
+                                    Console.WriteLine($" - {c.Issue} (Status: {c.Status})");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Complaints: None");
+                            }
+                        }
+                        break;
+
+
+                    case "9":
                         exit = true;
                         break;
 
@@ -173,7 +243,15 @@ namespace SHMS.ConsoleApp
             await roomService.SaveStudentsAsync(students);
             await roomService.SaveRoomsAsync(rooms);
 
+            JsonFileHelper.SaveToFile(complaints, "complaints.json");
+            JsonFileHelper.SaveToFile(fees, "fees.json");
+            JsonFileHelper.SaveToFile(students, "students.json");
+
+
+
             Console.WriteLine("Exiting SHMS Console App.");
+
+
         }
     }
 }

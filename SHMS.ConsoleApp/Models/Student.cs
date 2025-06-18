@@ -8,9 +8,13 @@ namespace SmartHostelManagementSystem.Models;
 
             public Student() { }
 
+            
+
             public Student(int id, string name, int roomNumber, bool feePaid) : base(id, name)
             {
                 RoomNumber = roomNumber;
                 FeePaid = feePaid;
             }
-        }
+
+            public bool IsAllocated { get; set; } = false;
+}

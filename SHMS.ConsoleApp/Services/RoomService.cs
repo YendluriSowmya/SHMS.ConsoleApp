@@ -1,10 +1,14 @@
 using SmartHostelManagementSystem.Models;
+using System.Linq;
 using System.Text;
+using System.Text.Json;
 
 namespace SmartHostelManagementSystem.Services
 {
     public class RoomService
     {
+
+        private readonly string roomFilePath = "rooms.json";
         private readonly string _studentFilePath = Path.Combine("data", "students.txt");
         private readonly string _roomFilePath = Path.Combine("data", "rooms.txt");
 
@@ -18,8 +22,15 @@ namespace SmartHostelManagementSystem.Services
             if (room.Occupants.Count >= room.Capacity)
                 throw new InvalidOperationException("Room is full.");
 
-            room.AddStudent(student);
+            if (!room.HasSpace)
+                throw new Exception("Room is already full.");
+
+            if (room.Occupants.Contains(student))
+                throw new Exception("Student is already in this room.");
+
+            room.Occupants.Add(student);
             student.RoomNumber = room.RoomNumber;
+            student.IsAllocated = true;
 
             // Save updated lists after allocation
             var students = await LoadStudentsAsync();
@@ -85,37 +96,20 @@ namespace SmartHostelManagementSystem.Services
 
         public async Task SaveRoomsAsync(List<Room> rooms)
         {
-            using var writer = new StreamWriter(_roomFilePath, false, Encoding.UTF8);
-            foreach (var r in rooms)
-            {
-                string line = $"{r.RoomNumber},{r.Capacity},{r.Occupants.Count}";
-                await writer.WriteLineAsync(line);
-            }
+            var json = JsonSerializer.Serialize(rooms, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync("rooms.json", json);
         }
+
 
         public async Task<List<Room>> LoadRoomsAsync()
         {
-            var rooms = new List<Room>();
-
-            if (!File.Exists(_roomFilePath))
-                return rooms;
-
-            using var reader = new StreamReader(_roomFilePath, Encoding.UTF8);
-            while (!reader.EndOfStream)
+            if (File.Exists(roomFilePath))
             {
-                var line = await reader.ReadLineAsync();
-                var parts = line?.Split(',');
-
-                if (parts?.Length >= 2)
-                {
-                    rooms.Add(new Room(
-                        roomNumber: int.Parse(parts[0]),
-                        capacity: int.Parse(parts[1])
-                    ));
-                }
+                var json = await File.ReadAllTextAsync(roomFilePath);
+                return JsonSerializer.Deserialize<List<Room>>(json);
             }
-
-            return rooms;
+            return new List<Room>();
         }
+
     }
 }

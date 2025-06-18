@@ -8,7 +8,50 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Include="obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs" />
+	  <Compile Include="obj\Debug\net6.0\SHMS.ConsoleApp.AssemblyInfo.cs" />
+	  <Compile Include="obj\Debug\net6.0\SHMS.ConsoleApp.GlobalUsings.g.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="bin\Debug\net6.0\complaints.json" />
+	  <Content Include="bin\Debug\net6.0\data\jsconfig1.json" />
+	  <Content Include="bin\Debug\net6.0\data\rooms.txt" />
+	  <Content Include="bin\Debug\net6.0\data\students.txt" />
+	  <Content Include="bin\Debug\net6.0\fees.json" />
+	  <Content Include="bin\Debug\net6.0\rooms.json" />
+	  <Content Include="bin\Debug\net6.0\SHMS.ConsoleApp.deps.json" />
+	  <Content Include="bin\Debug\net6.0\SHMS.ConsoleApp.runtimeconfig.json" />
+	  <Content Include="bin\Debug\net6.0\students.json" />
+	  <Content Include="obj\Debug\net6.0\SHMS.ConsoleApp.csproj.FileListAbsolute.txt" />
+	  <Content Include="obj\Debug\net6.0\SHMS.ConsoleApp.sourcelink.json" />
+	  <Content Include="obj\project.assets.json" />
+	  <Content Include="obj\SHMS.ConsoleApp.csproj.nuget.dgspec.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Folder Include="Properties\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="bin\Debug\net6.0\SHMS.ConsoleApp.dll" />
+	  <None Include="bin\Debug\net6.0\SHMS.ConsoleApp.dll.config" />
+	  <None Include="bin\Debug\net6.0\SHMS.ConsoleApp.exe" />
+	  <None Include="bin\Debug\net6.0\SHMS.ConsoleApp.pdb" />
+	  <None Include="obj\Debug\net6.0\apphost.exe" />
+	  <None Include="obj\Debug\net6.0\refint\SHMS.ConsoleApp.dll" />
+	  <None Include="obj\Debug\net6.0\ref\SHMS.ConsoleApp.dll" />
+	  <None Include="obj\Debug\net6.0\SHMS.ConsoleApp.AssemblyInfoInputs.cache" />
+	  <None Include="obj\Debug\net6.0\SHMS.ConsoleApp.assets.cache" />
+	  <None Include="obj\Debug\net6.0\SHMS.ConsoleApp.csproj.BuildWithSkipAnalyzers" />
+	  <None Include="obj\Debug\net6.0\SHMS.ConsoleApp.csproj.CoreCompileInputs.cache" />
+	  <None Include="obj\Debug\net6.0\SHMS.ConsoleApp.dll" />
+	  <None Include="obj\Debug\net6.0\SHMS.ConsoleApp.GeneratedMSBuildEditorConfig.editorconfig" />
+	  <None Include="obj\Debug\net6.0\SHMS.ConsoleApp.genruntimeconfig.cache" />
+	  <None Include="obj\Debug\net6.0\SHMS.ConsoleApp.pdb" />
+	  <None Include="obj\project.nuget.cache" />
+	  <None Include="obj\SHMS.ConsoleApp.csproj.nuget.g.props" />
+	  <None Include="obj\SHMS.ConsoleApp.csproj.nuget.g.targets" />
 	</ItemGroup>
 
 </Project>

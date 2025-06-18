@@ -25,7 +25,13 @@ public class Room
 
 	public bool IsFull() => Occupants.Count >= Capacity;
 
-	public void AddStudent(Student student)
+    public bool HasSpace => Occupants.Count < Capacity;
+
+    public bool IsAllocated { get; set; } = false;
+
+    public bool IsOccupied { get; set; } = false;
+
+    public void AddStudent(Student student)
 	{
 		if (IsFull())
 			throw new InvalidOperationException("Room is already full.");
