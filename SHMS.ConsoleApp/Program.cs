@@ -59,15 +59,16 @@ namespace SHMS.ConsoleApp
             {
                 Console.WriteLine("\nSMART HOSTEL MANAGEMENT SYSTEM");
                 Console.WriteLine("1. Register Student");
-                Console.WriteLine("2. Pay Fees");
+                Console.WriteLine("2. Pay Fees (Student)");
                 Console.WriteLine("3. Register Complaint");
                 Console.WriteLine("4. View Complaints");
                 Console.WriteLine("5. Update Complaint Status");
                 Console.WriteLine("6. Generate Reports");
                 Console.WriteLine("7. View Registered Student Information");
                 Console.WriteLine("8. Register/View Hostel Admin");
-                Console.WriteLine("10. Exit");
+                Console.WriteLine("9. Exit");
                 Console.Write("Choose an option: ");
+
                 string option = Console.ReadLine();
 
                 switch (option)
@@ -180,29 +181,9 @@ namespace SHMS.ConsoleApp
                         }
                         break;
 
-                    case "3":
-                        Console.Write("Enter Student ID: ");
-                        int feeId = int.Parse(Console.ReadLine());
-                        Console.Write("Enter Amount Paid: ");
-                        double amt = double.Parse(Console.ReadLine());
-                        var f = new FeeRecord(feeId, amt);
-                        var st = students.FirstOrDefault(s => s.Id == feeId);
-                        if (st != null)
-                        {
-                            f.Student = st;
-                            f.IsPaid = true;
-                            f.Validate();
-                            fees.Add(f);
-                            JsonFileHelper.SaveToFile(fees, "fees.json");
-                            Console.WriteLine("Fee payment recorded.");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Student not found.");
-                        }
-                        break;
+                   
 
-                    case "4":
+                    case "3":
                         Console.Write("Enter Complaint ID: ");
                         int cid = int.Parse(Console.ReadLine());
                         Console.Write("Enter Student ID: ");
@@ -228,7 +209,7 @@ namespace SHMS.ConsoleApp
                         Console.WriteLine("Complaint registered.");
                         break;
 
-                    case "5":
+                    case "4":
                         Console.Write("Enter Status to Filter (e.g., Pending, Resolved): ");
                         string status = Console.ReadLine();
                         var filtered = complaints.Where(c => c.Status.Equals(status, StringComparison.OrdinalIgnoreCase));
@@ -236,7 +217,7 @@ namespace SHMS.ConsoleApp
                             Console.WriteLine($"Complaint ID: {comp.ComplaintID}, Issue: {comp.Issue}, Student ID: {comp.StudentID}");
                         break;
 
-                    case "6":
+                    case "5":
                         Console.Write("Enter Complaint ID: ");
                         int compToUpdate = int.Parse(Console.ReadLine());
                         Console.Write("Enter New Status (e.g., Resolved, In Progress): ");
@@ -246,23 +227,23 @@ namespace SHMS.ConsoleApp
                         Console.WriteLine("Complaint status updated.");
                         break;
 
-                    case "7":
+                    case "6":
                         reportsService.GenerateReport();
                         break;
 
-                    case "8":
+                    case "7":
                         foreach (var s in students)
                         {
                             Console.WriteLine($"ID: {s.Id}, Name: {s.Name}, Contact: {s.ContactNumber}, Room: {s.RoomNumber}, Fee Paid: {s.FeePaid}");
                         }
                         break;
 
-                    case "9":
+                    case "8":
                         foreach (var a in admins)
                             a.DisplayInfo();
                         break;
 
-                    case "10":
+                    case "9":
                         exit = true;
                         break;
 
