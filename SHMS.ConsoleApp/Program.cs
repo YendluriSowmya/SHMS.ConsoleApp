@@ -16,14 +16,14 @@ namespace SHMS.ConsoleApp
             var roomService = new RoomService();
             var students = JsonFileHelper.LoadFromFile<Student>("students.json");
             var rooms = await roomService.LoadRoomsAsync();
-            var complaints = JsonFileHelper.LoadFromFile<Complaint>("complaints.json");
+            var complaintManager = new ComplaintManager();
             var fees = JsonFileHelper.LoadFromFile<FeeRecord>("fees.json");
             var admins = JsonFileHelper.LoadFromFile<HostelAdmin>("admins.json");
-            var complaintManager = new ComplaintManager();
-            var reportsService = new ReportsService(rooms, complaints, fees, students);
+            var reportsService = new ReportsService(rooms,complaintManager.GetAllComplaints(), fees, students);
 
 
-        if (admins.Count == 0)
+
+            if (admins.Count == 0)
             {
                 Console.WriteLine("\nNo Hostel Admin Found. Please register.");
                 Console.Write("Enter Admin ID: ");
@@ -185,8 +185,7 @@ namespace SHMS.ConsoleApp
                    
 
                     case "3":
-                        Console.Write("Enter Complaint ID: ");
-                        int cid = int.Parse(Console.ReadLine());
+                       
                         Console.Write("Enter Student ID: ");
                         int compSid = int.Parse(Console.ReadLine());
                         Console.Write("Describe the Issue: ");
@@ -196,7 +195,6 @@ namespace SHMS.ConsoleApp
 
                         var complaint = new Complaint
                         {
-                            ComplaintID = cid,
                             StudentID = compSid,
                             Issue = issue,
                             Status = "Pending",
@@ -205,15 +203,16 @@ namespace SHMS.ConsoleApp
                         };
 
                         complaint.Validate();
-                        complaints.Add(complaint);
-                        JsonFileHelper.SaveToFile(complaints, "complaints.json");
+                        await complaintManager.RegisterComplaintAsync(complaint);
+
                         Console.WriteLine("Complaint registered.");
                         break;
 
                     case "4":
                         Console.Write("Enter Status to Filter (e.g., Pending, Resolved): ");
                         string status = Console.ReadLine();
-                        var filtered = complaints.Where(c => c.Status.Equals(status, StringComparison.OrdinalIgnoreCase));
+                        var filtered = complaintManager.GetAllComplaints().Where(c => c.Status.Equals(status, StringComparison.OrdinalIgnoreCase));
+
                         foreach (var comp in filtered)
                             Console.WriteLine($"Complaint ID: {comp.ComplaintID}, Issue: {comp.Issue}, Student ID: {comp.StudentID}");
                         break;
@@ -224,7 +223,6 @@ namespace SHMS.ConsoleApp
                         Console.Write("Enter New Status (e.g., Resolved, In Progress): ");
                         string newStatus = Console.ReadLine();
                         complaintManager.UpdateComplaintStatus(compToUpdate, newStatus);
-                        JsonFileHelper.SaveToFile(complaints, "complaints.json");
                         Console.WriteLine("Complaint status updated.");
                         break;
 
