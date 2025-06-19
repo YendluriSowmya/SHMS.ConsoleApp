@@ -69,7 +69,7 @@ namespace Services
             }
         }
 
-        // ✅ Added method for Program.cs compatibility
+        
         public void GenerateReport()
         {
             Console.WriteLine("\n========== SMART HOSTEL SYSTEM REPORT ==========");
