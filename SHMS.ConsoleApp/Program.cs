@@ -60,12 +60,12 @@ namespace SHMS.ConsoleApp
                 Console.WriteLine("\nSMART HOSTEL MANAGEMENT SYSTEM");
                 Console.WriteLine("1. Register Student");
                 Console.WriteLine("2. Pay Fees");
-                Console.WriteLine("4. Register Complaint");
-                Console.WriteLine("5. View Complaints");
-                Console.WriteLine("6. Update Complaint Status");
-                Console.WriteLine("7. Generate Reports");
-                Console.WriteLine("8. View Registered Student Information");
-                Console.WriteLine("9. Register/View Hostel Admin");
+                Console.WriteLine("3. Register Complaint");
+                Console.WriteLine("4. View Complaints");
+                Console.WriteLine("5. Update Complaint Status");
+                Console.WriteLine("6. Generate Reports");
+                Console.WriteLine("7. View Registered Student Information");
+                Console.WriteLine("8. Register/View Hostel Admin");
                 Console.WriteLine("10. Exit");
                 Console.Write("Choose an option: ");
                 string option = Console.ReadLine();
